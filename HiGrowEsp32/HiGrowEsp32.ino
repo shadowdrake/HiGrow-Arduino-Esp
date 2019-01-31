@@ -6,7 +6,7 @@
 //#define DHTTYPE DHT11   // DHT 11
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 #define DHTTYPE DHT11   // DHT 22  (AM2302), AM2321
-#define uS_TO_S_FACTOR 1000000
+#define uS_TO_S_FACTOR 1000000LL
 
 unsigned long now;
 int DEEPSLEEP_SECONDS = 1800;
@@ -47,8 +47,8 @@ void setup() {
   while(!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  esp_deep_sleep_enable_timer_wakeup(1800 * uS_TO_S_FACTOR);
-  esp_deep_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
+  esp_sleep_enable_timer_wakeup(1800 * uS_TO_S_FACTOR);
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
 
   pinMode(16, OUTPUT); 
   pinMode(POWER_PIN, INPUT);
@@ -72,7 +72,7 @@ void loop() {
   http.addHeader("Content-Type", "application/json");
   int httpResponseCode = http.POST(body);
   Serial.println(httpResponseCode);
-  esp_deep_sleep_enable_timer_wakeup(DEEPSLEEP_SECONDS * uS_TO_S_FACTOR);
+  esp_sleep_enable_timer_wakeup(DEEPSLEEP_SECONDS * uS_TO_S_FACTOR);
   esp_deep_sleep_start();
   
 }
